@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compartición de Carpetas en Linux</title>
+    <style>
+        /* Estilos globales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        /* Barra lateral */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            padding-top: 20px;
+            color: white;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        /* Contenido principal */
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+
+        /* Encabezados */
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2.5em;
+        }
+
+        h2, h3 {
+            margin-top: 20px;
+        }
+
+        /* Estilo para las secciones de pasos */
+        .step {
+            background-color: #ffffff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Código */
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 1em;
+            border: 1px solid #ddd;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        /* Lista de pasos */
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        /* Imágenes */
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        /* Barra superior */
+        header {
+            background-color: #444;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Guía Completa para la Compartición de Carpetas en Linux</h1>
+    </header>
+
+    <!-- Barra lateral -->
+    <div class="sidebar">
+        <h2>Índice</h2>
+        <a href="#introduccion">1. Introducción</a>
+        <a href="#herramientas">2. Herramientas y Métodos</a>
+        <a href="#ejemplo">3. Ejemplo Práctico</a>
+        <a href="#automatizacion">4. Automatización</a>
+        <a href="#solucion">5. Solución de Problemas</a>
+        <a href="#seguridad">6. Seguridad</a>
+        <a href="#conclusion">7. Conclusión</a>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="content">
+        
+        <section id="introduccion">
+            <h2>1. Introducción</h2>
+            <p>Compartir archivos en una red es crucial para la colaboración y el intercambio de datos entre máquinas. Este proceso facilita el acceso y la transferencia de archivos sin la necesidad de medios físicos.</p>
+            <p><strong>Escenarios de uso:</strong></p>
+            <ul>
+                <li><strong>Entre equipos Linux:</strong> Ideal para servidores y estaciones de trabajo en una red local.</li>
+                <li><strong>Entre Linux y Windows:</strong> Usando herramientas como Samba, que permiten la compatibilidad con Windows.</li>
+                <li><strong>Acceso remoto:</strong> Usando SSHFS para montar una carpeta de manera segura sobre una conexión SSH.</li>
+            </ul>
+        </section>
+
+        <section id="herramientas">
+            <h2>2. Herramientas y Métodos</h2>
+            <h3>2.1. Samba</h3>
+            <p>Samba es una implementación de los protocolos SMB/CIFS que permite compartir archivos e impresoras entre sistemas Linux y Windows.</p>
+            <h3>2.2. NFS</h3>
+            <p>NFS (Network File System) es una solución para compartir carpetas entre sistemas Linux, permitiendo que los archivos de una máquina sean accesibles desde otras máquinas en la red.</p>
+            <h3>2.3. SSHFS</h3>
+            <p>SSHFS es una herramienta que permite montar un sistema de archivos remoto a través de una conexión SSH, ideal para acceso seguro y remoto a archivos en otra máquina.</p>
+        </section>
+
+        <section id="ejemplo">
+            <h2>3. Ejemplo Práctico: Compartir una Carpeta con Samba</h2>
+            <p>Vamos a compartir una carpeta utilizando Samba, un método popular para compartir entre Linux y Windows.</p>
+
+            <div class="step">
+                <h3>3.1. Instalación de Samba</h3>
+                <p>Para instalar Samba en un sistema Linux, ejecuta el siguiente comando:</p>
+                <pre><code>sudo apt-get install samba samba-common-bin</code></pre>
+            </div>
+
+            <div class="step">
+                <h3>3.2. Configuración del servicio Samba</h3>
+                <p>Abrimos el archivo de configuración de Samba:</p>
+                <pre><code>sudo nano /etc/samba/smb.conf</code></pre>
+                <p>Añadimos la configuración de la carpeta compartida:</p>
+                <pre><code>[compartida]
+   path = /home/usuario/compartida
+   read only = no
+   browsable = yes
+   guest ok = yes
+   </code></pre>
+            </div>
+
+            <div class="step">
+                <h3>3.3. Establecer permisos para la carpeta compartida</h3>
+                <p>Asignamos permisos adecuados:</p>
+                <pre><code>sudo chmod -R 777 /home/usuario/compartida</code></pre>
+            </div>
+
+            <div class="step">
+                <h3>3.4. Reiniciar el servicio Samba</h3>
+                <p>Reiniciamos el servicio para aplicar los cambios:</p>
+                <pre><code>sudo systemctl restart smbd</code></pre>
+            </div>
+
+            <div class="step">
+                <h3>3.5. Acceder a la carpeta desde otro equipo</h3>
+                <p>Desde otro equipo en la misma red, abre el explorador de archivos y accede a la carpeta con:</p>
+                <pre><code>\\ip_del_servidor\compartida</code></pre>
+            </div>
+        </section>
+
+        <section id="automatizacion">
+            <h2>4. Automatización de la Compartición</h2>
+            <p>Para montar automáticamente las carpetas compartidas al inicio, agrega una línea en el archivo <code>/etc/fstab</code>:</p>
+            <pre><code>//ip_del_servidor/compartida /mnt/compartida cifs credentials=/home/usuario/.smbcredentials 0 0</code></pre>
+        </section>
+
+        <section id="solucion">
+            <h2>5. Solución de Problemas Comunes</h2>
+            <p>Si la carpeta compartida no aparece, asegúrate de que el servicio Samba está en ejecución:</p>
+            <pre><code>sudo systemctl status smbd</code></pre>
+            <p>Verifica los permisos y firewall para asegurarte de que todo está correcto.</p>
+        </section>
+
+        <section id="seguridad">
+            <h2>6. Seguridad y Buenas Prácticas</h2>
+            <p>Para proteger las carpetas compartidas, asegúrate de configurar autenticación adecuada y permisos restrictivos.</p>
+        </section>
+
+        <section id="conclusion">
+            <h2>7. Conclusión</h2>
+            <p>Hemos aprendido a compartir carpetas en Linux usando Samba. Cada herramienta tiene sus ventajas dependiendo del entorno y las necesidades de seguridad.</p>
+        </section>
+        
+    </div>
+</body>
+</html>
